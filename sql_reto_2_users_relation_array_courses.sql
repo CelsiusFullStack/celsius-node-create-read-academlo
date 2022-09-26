@@ -6,13 +6,13 @@ SELECT DISTINCT
 	users.password,
 	( SELECT ARRAY_AGG ('[course:' || cc.course || ' level:' || l.LEVEL || ' category:' || C.category || ']' ) inscriptions 
 		FROM 	users_courses_master AS ucm
-					INNER JOIN courses AS cc ON ucm.id_course = cc.id_course
-					INNER JOIN levels AS l ON cc.id_level = l.id_level
-					INNER JOIN categories AS "c" ON cc.id_category = "c".id_category 
+			INNER JOIN courses AS cc ON ucm.id_course = cc.id_course
+			INNER JOIN levels AS l ON cc.id_level = l.id_level
+			INNER JOIN categories AS "c" ON cc.id_category = "c".id_category 
 		WHERE
-					ucm.id_user = users.id_user 
+			ucm.id_user = users.id_user 
 		GROUP BY
-					ucm.id_user	
+			ucm.id_user	
 	) as inscriptions
 FROM
 	users
