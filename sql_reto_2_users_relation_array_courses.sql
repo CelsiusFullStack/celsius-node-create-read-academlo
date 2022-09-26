@@ -4,11 +4,15 @@ SELECT DISTINCT
 	CONCAT_WS(', ', users.first_name , users.last_name) as full_name,
 	users.email,
 	users.password,
-	( SELECT ARRAY_AGG (' ' || cc.course ) AS inscriptions
-					FROM  users_courses_master as ucm
-					INNER  JOIN courses cc 	ON ucm.id_course = cc.id_course
-					WHERE 	ucm.id_user=users.id_user
-					GROUP BY ucm.id_user	
+	( SELECT ARRAY_AGG ('[course:' || cc.course || ' level:' || l.LEVEL || ' category:' || C.category || ']' ) inscriptions 
+		FROM 	users_courses_master AS ucm
+					INNER JOIN courses AS cc ON ucm.id_course = cc.id_course
+					INNER JOIN levels AS l ON cc.id_level = l.id_level
+					INNER JOIN categories AS "c" ON cc.id_category = "c".id_category 
+		WHERE
+					ucm.id_user = users.id_user 
+		GROUP BY
+					ucm.id_user	
 	) as inscriptions
 FROM
 	users
